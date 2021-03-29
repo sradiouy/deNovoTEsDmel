@@ -19,6 +19,7 @@
 - RefrencePath =  full path to Reference genome in fasta format
 - genes2strain = sam file transfer of genes from reference genomes to strains
 - cds2strain = sam file transfer of cds from reference genomes to strains
+- githubData = full path to the data folder inside this repository
 
 ### Prepare CDS and genes reference fasta
 
@@ -46,4 +47,4 @@ $ python gene_transfer.py wdir strain FastaPath
 
 ### TE transfer 
 
-$ python TE_transfer.py wdir strain RefrencePath TEAnnotation
+$ python TE_transfer.py wdir strain RefrencePath githubData
