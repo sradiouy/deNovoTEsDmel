@@ -6,36 +6,6 @@
 ##############################################################################################################################
 ##############################################################################################################################
 
-
-### Preparo el genoma para usar solo ['2L', '2R', '3L', '3R', 'X']
-
-# from Bio import SeqIO
-
-# genomefasta = "/homes/users/sradio/scratch/eQTL_Dros/Reference/OurGenomes/assembly/dmel-all-chromosome-r6.31.fasta" # Version original del genoma
-# genomefasta = open(genomefasta)
-# genomefastadict = SeqIO.to_dict(SeqIO.parse(genomefasta, "fasta"))
-# chromosome_interest = ['2L', '2R', '3L', '3R', 'X']
-
-# fo = open("/homes/users/sradio/scratch/eQTL_Dros/Reference/OurGenomes/assembly/iso_v31_genome.fasta","w")
-# for chromosome in chromosome_interest:
-#     if chromosome == "X":
-#         line = ">" + chromosome + "\n" + genomefastadict[chromosome].seq._data
-#     else:
-#         line = ">" + chromosome + "\n" + genomefastadict[chromosome].seq._data + "\n"
-#     fo.write(line)
-
-# fo.close()
-
-### Minimaps2 minimap2/2.11-foss-2016b 
-
-## Mapeo de regiones flanqueantes
-
-# minimap2 -ax splice -G100k -B2 -t 8 -uf -C5 /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Genome_Files/iso_v31_genome.fasta /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/RAL-177/RAL-177_TE_flanking_regions.fasta > /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/RAL-177/TE_flanking_regions_RAL177_2_ISO.sam
-
-## Mapeo de secuencias completas de TEs
-
-# minimap2 -ax asm5 -t 8  -uf -C5 /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Genome_Files/iso_v31_genome.fasta /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/RAL-177/RAL-177_TE_sequence.fasta > /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/RAL-177/TE_sequence_RAL177_2_ISO.sam 
-
 import subprocess
 import pandas as pd
 import pysam
@@ -298,14 +268,13 @@ def parse_intersect_files_euchromatin(intersection_file):
 ## Cargo el log file 
 
 
-# logfile = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1]+ ".log"
 
-logfile = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1]+ ".log"
+logfile = sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2]+ ".log"
 
 ### Primero que todo creo un directorio 
 
 fo = open(logfile,"a")
-log_line = "--- Starting TE Transfer from "+ sys.argv[1] + " to ISO1 ---\n"
+log_line = "--- Starting TE Transfer from "+ sys.argv[2] + " to ISO1 ---\n"
 fo.write(log_line)
 fo.close()
 
@@ -314,11 +283,14 @@ fo.close()
 
 ### Veo si la secuencia completa de los TEs mapearon en un lugar unico
 
-reference_genome_file = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Genome_Files/iso_v31_genome.fasta"
 
-te_complete_sequence = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/"+ sys.argv[1] + "/" + sys.argv[1] + "_TE_sequence.fasta"
 
-te_complete_samfile = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/TE_sequence_" + sys.argv[1] + "_2_ISO.sam"
+
+reference_genome_file = sys.argv[3]
+
+te_complete_sequence =  sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_TE_sequence.fasta"
+
+te_complete_samfile = sys.argv[1] + "/" +  sys.argv[2] + "/TE_sequence_" + sys.argv[2] + "_2_ISO.sam"
 
 
 fo = open(logfile,"a")
@@ -375,9 +347,9 @@ fo.close()
 
 ## Defino todos los reads existentes y los llevo a un dataframe
 
-te_flanking_samfile = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/TE_flanking_regions_" + sys.argv[1] + "_2_ISO.sam"
+te_flanking_samfile = sys.argv[1] + "/" + sys.argv[2] + "/TE_flanking_regions_" + sys.argv[2] + "_2_ISO.sam"
 
-te_flanking_sequence = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/"+ sys.argv[1] + "/" + sys.argv[1] + "_TE_flanking_regions.fasta"
+te_flanking_sequence = sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2] + "_TE_flanking_regions.fasta"
 
 
 fo = open(logfile,"a")
@@ -799,7 +771,7 @@ fo.close()
 ### Agrego info sobre nested y tandem de cada TE
 
 
-df_nested_tandem = pd.read_table("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/"+ sys.argv[1] + "/" + sys.argv[1] + "_TE_nested_tandem_info.tsv",sep="\t",header=0)
+df_nested_tandem = pd.read_table( sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2] + "_TE_nested_tandem_info.tsv",sep="\t",header=0)
 
 te_transferred = set(df_te.ID.tolist()) # Veo cuales fueron los TE transferidos - 1953
 list_te_to_redefine = lnotmapped + TE_not_assigned # Veo cuales fueron los TE transferidos
@@ -959,7 +931,7 @@ te_merged_line = [te.split("&")[0] + "\t" + " - ".join(te.split("&")[1:]) for te
 
 te_merged_line = "\n".join(te_merged_line)
 
-merged_tes_file = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/"+ sys.argv[1] + "/" + sys.argv[1] + "_TE_merged.tsv"
+merged_tes_file = sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_TE_merged.tsv"
 
 fo = open(merged_tes_file,"w")
 fo.write(te_merged_line)
@@ -986,7 +958,7 @@ df_te_backup = df_te
 
 df_te_2_bed =df_te[['chromosome', 'start', 'end', 'ID', 'frame', 'strand']]
 
-df_te_2_bed.to_csv("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/"+ sys.argv[1] + "/" + sys.argv[1] + "_TE_transfer.bed",sep="\t",header=False,index=False)
+df_te_2_bed.to_csv(sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_TE_transfer.bed",sep="\t",header=False,index=False)
 
 ###########################################################################################################################################################################################################################################################################################################
 
@@ -1001,7 +973,7 @@ df_te_2_bed.to_csv("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation
 
 
 
-strain_gene_info = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/"+ sys.argv[1] + "/" + sys.argv[1] + "_gene_transfer_info.tsv" 
+strain_gene_info = sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_gene_transfer_info.tsv" 
 
 df_gene_strain_info= pd.read_table(strain_gene_info,sep="\t",header=0)
 
@@ -1018,7 +990,7 @@ genes_remove_softclipping = df_gene_strain_info[((df_gene_strain_info["percent_s
 
 
 
-strain_gene_bed = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/"+ sys.argv[1] + "/" + sys.argv[1] + "_gene_transfer.bed" # Anotacion de los genes del strain
+strain_gene_bed = sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2] + "_gene_transfer.bed" # Anotacion de los genes del strain
 
 df_gene_strain= pd.read_table(strain_gene_bed,sep="\t",header=None,names=["chr","start","end","gene","frame","strand","MM","I","C","S"])
 
@@ -1036,10 +1008,10 @@ df_gene_strain = df_gene_strain.sort_values(["chr","start","end"])
 
 df_gene_strain = df_gene_strain.reset_index(drop=True)
 
-df_gene_strain.to_csv("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_gene_transfer_for_comparision.bed",sep="\t",header=False,index=False)
+df_gene_strain.to_csv(sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2] + "_gene_transfer_for_comparision.bed",sep="\t",header=False,index=False)
 
 
-reference_gene_bed = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/Reference_gene_for_" + sys.argv[1] + "_transfer.bed"  # estas son los genes de REF que estan presentes en la anotacion de la cepa
+reference_gene_bed = sys.argv[1] + "/"  + sys.argv[2] + "/Reference_gene_for_" + sys.argv[2] + "_transfer.bed"  # estas son los genes de REF que estan presentes en la anotacion de la cepa
 
 df_gene_ref= pd.read_table(reference_gene_bed,sep="\t",header=None,names=["chr","start","end","gene","frame","strand"])
 
@@ -1050,7 +1022,7 @@ df_gene_ref = df_gene_ref.sort_values(["chr","start","end"])
 
 df_gene_ref = df_gene_ref.reset_index(drop=True)
 
-df_gene_ref.to_csv("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/Reference_gene_for_" + sys.argv[1] + "_transfer_for_comparision.bed",sep="\t",header=False,index=False)
+df_gene_ref.to_csv(sys.argv[1] + "/"  + sys.argv[2] + "/Reference_gene_for_" + sys.argv[2] + "_transfer_for_comparision.bed",sep="\t",header=False,index=False)
 
 
 fo = open(logfile,"a")
@@ -1069,9 +1041,9 @@ fo.close()
 
 # Defino la interaccion de cada TE del genoma de interes en el genoma de referencia (utilizando las coordenadas de la transferencia)
 
-reference_gene_bed = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/Reference_gene_for_" + sys.argv[1] + "_transfer_for_comparision.bed"  # estas son los genes de REF que estan presentes en la anotacion de la cepa
+reference_gene_bed = sys.argv[1] + "/"  + sys.argv[2] + "/Reference_gene_for_" + sys.argv[2] + "_transfer_for_comparision.bed"  # estas son los genes de REF que estan presentes en la anotacion de la cepa
 
-te_bed_strain = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_TE_transfer.bed" # estas son las coordenadas de los TEs de la cepa llevadas al genoma de referencia
+te_bed_strain = sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2] + "_TE_transfer.bed" # estas son las coordenadas de los TEs de la cepa llevadas al genoma de referencia
 
 
 overlap = bedtoolsclosest(reference_gene_bed,te_bed_strain,"overlap.txt","overlap")
@@ -1147,9 +1119,9 @@ for name,grp in df_down.groupby("TEID"):
 
 # Analizo la interaccion de los TE con los genes en el strain
 
-strain_gene_bed = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_gene_transfer_for_comparision.bed" # Anotacion de los genes del strain
+strain_gene_bed = sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2] + "_gene_transfer_for_comparision.bed" # Anotacion de los genes del strain
 
-te_original_strain_bed = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/TE_Annotation/" + sys.argv[1] + ".GenesAllClosestGenes.bed.bed" 
+te_original_strain_bed = sys.argv[4]
 
 
 overlap = bedtoolsclosest(strain_gene_bed,te_original_strain_bed,"overlap.txt","overlap")
@@ -1271,9 +1243,9 @@ fo.write(log_line)
 fo.close()
 
 
-reference_te_bed = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/TE_Annotation/ISO1_TE_FlyBase_Repet.bed"
+reference_te_bed = sys.argv[4] + "/ISO1_TE_FlyBase_Repet.bed"
 
-reference_te_bed_info = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/TE_Annotation/ISO1_TE_FlyBase_Repet_info.tsv"
+reference_te_bed_info = sys.argv[4] + "/ISO1_TE_FlyBase_Repet_info.tsv"
 
 df_ref_te_info = pd.read_table(reference_te_bed_info,sep="\t",header=0)
 
@@ -1282,7 +1254,7 @@ df_ref_te_info.columns = ['DB', 'ID_REF', 'ID_REF_ALIAS', 'TE_LEN', 'FAMILY']
 
 
 
-strain_2_reference_te_bed = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_TE_transfer.bed" # estas son las coordenadas de los TEs de RAL-177 llevadas al genoma de referencia
+strain_2_reference_te_bed = sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2] + "_TE_transfer.bed" # estas son las coordenadas de los TEs de RAL-177 llevadas al genoma de referencia
 
 intersect_te_strain_ref = intersect(strain_2_reference_te_bed,reference_te_bed,"intersect_te_strain_ref.txt")
 
@@ -1391,15 +1363,15 @@ df_te.columns = ['chromosome', 'start', 'end', 'id', 'frame', 'strand','te_merge
 ### Agrego info sobre nested y tandem de cada TE
 
 
-df_nested_tandem = pd.read_table("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_TE_nested_tandem_info.tsv",sep="\t",header=0)
+df_nested_tandem = pd.read_table(sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_TE_nested_tandem_info.tsv",sep="\t",header=0)
 
 df_te = df_te.merge(df_nested_tandem,left_on="id",right_on="ID")
 
 ### agrego info sobre heterocromatina
 
-te_strain_transferred_to_ref = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_TE_transfer.bed"
+te_strain_transferred_to_ref =sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_TE_transfer.bed"
 
-euchromatin_bed = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/dmel-all-euchromatin-region.bed"
+euchromatin_bed = sys.argv[4] + "/dmel-all-euchromatin-region.bed"
 
 
 euchromatin_intersect = intersect_euchromatin(te_strain_transferred_to_ref,euchromatin_bed,"euchromatin_intersect.txt")
@@ -1438,7 +1410,7 @@ df_te = df_te[['chromosome', 'start', 'end', 'id', 'te_number_id','frame', 'stra
        'partial_nested', 'tandem_up', 'tandem_down', 'te_flanking_unique_mapping_in_ref', 'sequence_unique_mapping','region']]
 
 
-te_transferred_info = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_TE_transferred_2_ISO_info.tsv"
+te_transferred_info =  sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_TE_transferred_2_ISO_info.tsv"
 
 df_te.to_csv(te_transferred_info,sep="\t",header=True,index=False)
 
