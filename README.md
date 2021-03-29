@@ -18,12 +18,12 @@ python cds_gene_fasta_preparation.py
 
 wdir = working directory
 strain = base name of a strain (i.e., STO-022)
-FastaPath = path to fasta file of genome assemble
-TEAnnotation = TE annotation file in bed format
+FastaPath = full path to fasta file of genome assemble
+TEAnnotation = full path to TE annotation file in bed format
 
 ### Obtain fasta sequence of TEs from bed file
 
-$ python bedTE2Fasta.py strain wdir TEAnnotation FastaPath
+$ python bedTE2Fasta.py wdir strain TEAnnotation FastaPath
 
 ### get information of nested and tandem TEs
 
