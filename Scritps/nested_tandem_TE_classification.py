@@ -65,7 +65,7 @@ def parse_intersect_tes_tes_same_strain(intersection_file):
 # Cargo el archivo log
 
 
-logfile = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1]+ ".log"
+logfile = sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2]+ ".log"
 
 
 ### Primero que todo creo un directorio 
@@ -75,7 +75,7 @@ log_line = "--- Determination of nested and tandem TE's ---\n"
 fo.write(log_line)
 
 
-te_original_strain_bed = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/TE_Annotation/"+sys.argv[1]+".GenesAllClosestGenes.bed.bed" 
+te_original_strain_bed = sys.argv[3] 
 
 fo = open(logfile,"a")
 log_line = "--- Running bedtools intersect to obtain nested TE's ---\n"
@@ -245,7 +245,7 @@ df_tandem = pd.DataFrame(tandem_info,columns=["ID","tandem_up","tandem_down"])
 df_nested_tandem = df_nested.merge(df_tandem,on="ID")
 
 
-nested_te_file = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_TE_nested_tandem_info.tsv"
+nested_te_file = sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_TE_nested_tandem_info.tsv"
 
 
 fo = open(logfile,"a")
