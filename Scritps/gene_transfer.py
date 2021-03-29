@@ -15,17 +15,6 @@ import subprocess
 ##############################################################################################################################
 ##############################################################################################################################
 
-### Minimaps2 minimap2/2.11-foss-2016b 
-
-# minimap2 -ax asm5 -t 8  -uf -C5 /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Genome_Files/ral177_DECO_FixINTRAChr-RaGOOFull.fasta /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/Reference_genes.fasta > /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/RAL-177/genes2RAL177.sam  
-
-# minimap2 -ax splice -t 8 -uf -C5 /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Genome_Files/ral177_DECO_FixINTRAChr-RaGOOFull.fasta /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/Reference_primary_cds.fasta > /homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/RAL-177/cds2RAL177.sam
-
-
-
-# sys.argv[1] RAL-177
-# sys.argv[2] full-path of genome file of RAL-177
-
 
 def runcml(cml):
     """Ejecuta un comando"""
@@ -157,7 +146,7 @@ def compare_strain_refrence_synteny(synteny_strain,synteny_reference):
 
 ### Abro el log 
 
-logfile = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1]+ ".log"
+logfile = sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2]+ ".log"
 
 
 fo = open(logfile,"a")
@@ -166,11 +155,12 @@ fo.close()
 
 
 # Cargo secuencia genomica en forma de un diccionario
-genome = ObtainSeq(sys.argv[2])
+genome = ObtainSeq(sys.argv[3])
 
 
 # Cargo coordenadas de transferencia de CDS y me quedo solo con los genes que estan en cromosomas de interes
-transfer_file = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/Reference_primary_cds_transfer.bed"
+
+transfer_file = "Reference_primary_cds_transfer.bed"
 
 df_transfer = pd.read_table(transfer_file,sep="\t",names=["seqname","transfer_start","transfer_end","gene","transfer_frame","transfer_strand"])
 
@@ -187,9 +177,9 @@ genes_interest = df_transfer.gene.tolist()
 
 #### Analisis con CDS
 
-cds_sequence_file = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/Reference_primary_cds.fasta"
+cds_sequence_file = "Reference_primary_cds.fasta"
 
-cdssamfile =  "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/cds2" + sys.argv[1] + ".sam"
+cdssamfile =  sys.argv[1] + "/" + sys.argv[2] + "/cds2" + sys.argv[2] + ".sam"
 
 
 fo = open(logfile,"a")
@@ -202,7 +192,7 @@ fo = open(logfile,"a")
 fo.write("--- Running Minimap2 for CDS sequences ---\n")
 fo.close()
 
-runminimap2(sys.argv[2],cds_sequence_file,cdssamfile,"cds")
+runminimap2(sys.argv[3],cds_sequence_file,cdssamfile,"cds")
 
 
 fo = open(logfile,"a")
@@ -235,7 +225,7 @@ for name,grp in df_to_define_type_of_mapping.groupby("gene"):
 df_to_define_type_of_mapping = pd.DataFrame(rows,columns=["genome","gene","mmcount","type"])
 
 
-mapping_information_file = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_CDS_mapping_information.tsv"
+mapping_information_file =  sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2] + "_CDS_mapping_information.tsv"
 
 
 df_to_define_type_of_mapping.to_csv(mapping_information_file,sep="\t",index=False,header=True)
@@ -359,7 +349,7 @@ fo.close()
 
 # Para eso utilizaremos Biopython para crear un diccionario de fastas de cada CDS
 
-cdsfasta = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/Reference_primary_cds.fasta"
+cdsfasta = "Reference_primary_cds.fasta"
 
 cdsfasta = open(cdsfasta)
 cdsfastadict = SeqIO.to_dict(SeqIO.parse(cdsfasta, "fasta"))
@@ -370,13 +360,13 @@ cdsfastadict = SeqIO.to_dict(SeqIO.parse(cdsfasta, "fasta"))
 
 gene_sequence_file = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/Reference_genes.fasta"
 
-genesamfile =  "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/gene2" + sys.argv[1] + ".sam"
+genesamfile =  sys.argv[1] + "/" + sys.argv[2] + "/gene2" + sys.argv[2] + ".sam"
 
 fo = open(logfile,"a")
 fo.write("--- Running Minimap2 for gene sequences ---\n")
 fo.close()
 
-runminimap2(sys.argv[2],gene_sequence_file,genesamfile,"gene")
+runminimap2(sys.argv[3],gene_sequence_file,genesamfile,"gene")
 
 
 fo = open(logfile,"a")
@@ -704,7 +694,7 @@ df_cds_synteny_mm_inversion_c_s["synteny_problem"] = ["N" if x == "YY" else "Y" 
 
 # Guardo la tabla
 
-gene_information_file = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_gene_transfer_info.tsv"
+gene_information_file = sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_gene_transfer_info.tsv"
 
 fo = open(logfile,"a")
 log_line = "--- Writing gene information table: " + gene_information_file + " ---\n"
@@ -716,7 +706,7 @@ df_cds_synteny_mm_inversion_c_s.to_csv(gene_information_file,sep="\t",index=Fals
 
 # Creo un bed con los genes sin los genes descartados y marcando problema de sintenia, mmapping, coromosoma e inversiones 
 
-gene_bed_file = "/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/" + sys.argv[1] + "/" + sys.argv[1] + "_gene_transfer.bed"
+gene_bed_file = sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_gene_transfer.bed"
 
 
 fo = open(logfile,"a")
