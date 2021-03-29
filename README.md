@@ -47,4 +47,4 @@ $ python gene_transfer.py wdir strain FastaPath
 
 ### TE transfer 
 
-$ python TE_transfer.py wdir strain RefrencePath githubData
+$ python TE_transfer.py wdir strain RefrencePath TEAnnotation githubData
