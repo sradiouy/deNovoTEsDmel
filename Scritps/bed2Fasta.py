@@ -26,12 +26,12 @@ def ObtainSeq(genome):
 
 # Creo por primera vez el log file
 
-logfile = sys.argv[2] + "/"  + sys.argv[1] + "/" + sys.argv[1]+ ".log"
+logfile = sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2]+ ".log"
 
 
 ### Primero que todo creo un directorio 
 
-dirName = sys.argv[2] + "/" +  sys.argv[1]
+dirName = sys.argv[1] + "/" +  sys.argv[2]
 
 if not os.path.exists(dirName):
     os.mkdir(dirName)
@@ -66,10 +66,10 @@ dict_genome = ObtainSeq(genome_file)
 
 # Obtengo la secuencia de los TE
 
-sequence_fasta = sys.argv[2] + "/"  + sys.argv[1] + "/" + sys.argv[1] + "_TE_sequence.fasta"
+sequence_fasta = sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2] + "_TE_sequence.fasta"
 
 fo = open(logfile,"a")
-log_line = "--- Writing complete TE sequence of "+ sys.argv[1] + " : " + sequence_fasta + " ---\n"
+log_line = "--- Writing complete TE sequence of "+ sys.argv[2] + " : " + sequence_fasta + " ---\n"
 fo.write(log_line)
 fo.close()
 
@@ -98,10 +98,10 @@ fo.close()
 
 df_annot_te = pd.DataFrame(row_list,columns=df_annot_te.columns.tolist())
 
-flanking_sequence = sys.argv[2] + "/"  + sys.argv[1] + "/" + sys.argv[1] + "_TE_flanking_regions.fasta"
+flanking_sequence = sys.argv[1] + "/"  + sys.argv[2] + "/" + sys.argv[2] + "_TE_flanking_regions.fasta"
 
 fo = open(logfile,"a")
-log_line = "--- Writing flanking (500 pb) TE sequence of "+ sys.argv[1] + " : " + flanking_sequence + " ---\n"
+log_line = "--- Writing flanking (500 pb) TE sequence of "+ sys.argv[2] + " : " + flanking_sequence + " ---\n"
 fo.write(log_line)
 fo.close()
 
@@ -173,7 +173,7 @@ for index,row in df_annot_te.iterrows():
 
 fo.close()
 
-TE_sequence_context_info = sys.argv[2] + "/" + sys.argv[1] + "/" + sys.argv[1] + "_TE_info.tsv"
+TE_sequence_context_info = sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_TE_info.tsv"
 
 fo = open(logfile,"a")
 log_line = "--- Writing information about the sequence context (inner N, flanking N, etc.) of the TE's "+ sys.argv[1] + " : " + TE_sequence_context_info + " ---\n"
