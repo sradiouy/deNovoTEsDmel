@@ -1,22 +1,21 @@
-# deNovoTEsDmel
+# TE TRANSFER
 
 
-load the folowwing modules: 
-- BEDTools/2.27.1-foss-2018b
+#### Programs versions used:
+
+-  BEDTools/2.27.1-foss-2018b
 -  minimap2/2.11-foss-2016b
 -  Python/3.7.2-GCCcore-8.2.0
-
 
 
 # Step to follow to transfer TEs and genes:
 
 #### Set varaible names
 
-wdir = working directory
-strain = base name of a strain (i.e., STO-022)
-FastaPath = full path to fasta file of genome assemble
-TEAnnotation = full path to TE annotation file in bed format
-
+- wdir = working directory
+- strain = base name of a strain (i.e., STO-022)
+- FastaPath = full path to fasta file of genome assemble
+- TEAnnotation = full path to TE annotation file in bed format
 
 ### Prepare CDS and genes reference fasta
 
