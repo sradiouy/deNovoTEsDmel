@@ -58,7 +58,7 @@ df_annot_te = df_annot_te[df_annot_te["seqname"].isin(chromosome_interest)]
 
 
 
-genome_file = sys.argv[2]
+genome_file = sys.argv[4]
 
 # Cargo genoma y lo transformo en diccionario
 
