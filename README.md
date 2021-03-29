@@ -27,18 +27,18 @@
 
 python cds_gene_fasta_preparation.py wdir
 
-### Obtain fasta sequence of TEs from bed file
+### TE fasta sequence
 
 $ python bedTE2Fasta.py wdir strain TEAnnotation FastaPath
 
-### get information of nested and tandem TEs
+### Nested and tandem TEs
 
 $ python nested_tandem_TE_classification.py wdir strain TEAnnotation
 
-### Gene Transfer 
+### Gene transfer 
 
 $ python gene_transfer.py strain FastaPath
 
-### TE Transfer 
+### TE transfer 
 
 $ python TE_transfer.py strain
