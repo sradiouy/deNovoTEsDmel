@@ -16,6 +16,9 @@
 - strain = base name of a strain (i.e., STO-022)
 - FastaPath = full path to fasta file of genome assemble
 - TEAnnotation = full path to TE annotation file in bed format
+- RefrencePath =  full path to Reference genome in fasta format
+- genes2strain = sam file transfer of genes from reference genomes to strains
+- cds2strain = sam file transfer of cds from reference genomes to strains
 
 ### Prepare CDS and genes reference fasta
 
@@ -35,7 +38,15 @@ $ python bedTE2Fasta.py wdir strain TEAnnotation FastaPath
 
 $ python nested_tandem_TE_classification.py wdir strain TEAnnotation
 
-### Gene transfer 
+### Gene transfer
+
+#### Run Minimap2 in splice-aware mode, and without it (Reference_genes.fasta and Reference_primary_cds.fasta: produced by cds_gene_fasta_preparation.py)
+
+- minimap2 -ax asm5 -t 8  -uf -C5 FastaPath Reference_genes.fasta > genes2strain 
+
+- minimap2 -ax splice -t 8 -uf -C5 FastaPath Reference_primary_cds.fasta > cds2strain
+
+
 
 $ python gene_transfer.py strain FastaPath
 
