@@ -1432,7 +1432,7 @@ fo.close()
 
 
 fo = open(logfile,"a")
-log_line = "--- " + sys.argv[1] + ": Done ---\n"
+log_line = "--- " + sys.argv[2] + ": Done ---\n"
 fo.write(log_line)
 fo.close()
 
