@@ -2,7 +2,7 @@ import pysam
 from collections import defaultdict
 import pandas as pd
 from Bio import SeqIO
-
+import sys
 
 # El primer paso de la estrategia consiste en la preparacion de los archivos fasta tanto de CDS como
 # de genes.  
@@ -10,7 +10,7 @@ from Bio import SeqIO
 # Por lo tanto cargaremos el archivo fasta al sistema. Y lo usaremos inicialmente para detectar cuales CDS 
 # cominezan con un ATG y cuales terminan con un STOP
 
-cds_fasta = '/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/dmel-all-CDS-r6.31.fasta'
+cds_fasta = "dmel-all-CDS-r6.31.fasta"
 
 transcripts = [] # Defino una lista vacia donde guardaremos cada CDS (Transcripto y CDS lo uso de forma equivalente)
 stopcodons = ["TAA","TAG","TGA"] # Defino los codones STOP
@@ -64,12 +64,12 @@ for name,grp in dfcds.groupby("gene"):
 
 dfcds_info = pd.DataFrame(list_rows,columns=["name","chromosome","gene","transcript","length","atg","stop","gene_included","transcript_included"])         
 
-dfcds_info.to_csv("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/Reference_primary_cds_info.tsv",sep="\t",index=False,header=True) 
+dfcds_info.to_csv(sys.argv[1] + "/Reference_primary_cds_info.tsv",sep="\t",index=False,header=True) 
 
 
 #### Finalmente escribo el nuevo fasta con solamente con los CDS derivados del transcripto de interes.
 
-with open(cds_fasta,"r") as fi, open("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/Reference_primary_cds.fasta","w") as fo:
+with open(cds_fasta,"r") as fi, open(sys.argv[1] + "/Reference_primary_cds.fasta","w") as fo:
     for line in fi:
         if ">" in line:
             flag = False
@@ -86,11 +86,11 @@ with open(cds_fasta,"r") as fi, open("/homes/users/sradio/scratch/eQTL_Dros/TEs_
             
 genes = list(dfcds_info.gene.unique()) # Determino cuales son esos genes
 
-genes_fasta = '/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/dmel-all-gene-r6.31.fasta' # establezo el archivo 
+genes_fasta = "dmel-all-gene-r6.31.fasta"
 
 # Creo el fasta de los genes seleccionados. 
 
-with open(genes_fasta,"r") as fi, open("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/genes.fasta","w") as fo:
+with open(genes_fasta,"r") as fi, open(sys.argv[1] + "/genes.fasta","w") as fo:
     for line in fi:
         if ">" in line:
             gene_flag = False
@@ -104,7 +104,7 @@ with open(genes_fasta,"r") as fi, open("/homes/users/sradio/scratch/eQTL_Dros/TE
  
 ### Luego genero un bed madre para los CDS y genes seleccionados a partir del gtf
             
-gff_file = '/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/dmel-all-r6.31.gtf'
+gff_file = "dmel-all-r6.31.gtf"
 
 header = ["seqname","source","feature","start","end","score","strand","frame","attribute"]
 
@@ -123,7 +123,7 @@ for index,row in df_genes.iterrows():
         single = [row.seqname,row.start,row.end,gene,".",row.strand]
         genes_rows.append(single)
 
-pd.DataFrame(genes_rows).to_csv("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/Reference_genes_transfer.bed",sep="\t",header=False,index=False)
+pd.DataFrame(genes_rows).to_csv(sys.argv[1] + "/Reference_genes_transfer.bed",sep="\t",header=False,index=False)
 
 ### Genero bed de CDSs usando el codon start y codon stop como marcadores del inicio y fin del transcripto
 
@@ -171,4 +171,4 @@ df_cds_bed = df_cds_bed[df_cds_bed["seqname"].isin(chromosome_interest)]
 df_cds_bed = df_cds_bed.sort_values(["seqname","start","end"])
 df_cds_bed = df_cds_bed.reset_index(drop=True)
    
-df_cds_bed.to_csv("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Annotation_Files/Reference_primary_cds_transfer.bed",sep="\t",header=False,index=False)
+df_cds_bed.to_csv(sys.argv[1] + "/Reference_primary_cds_transfer.bed",sep="\t",header=False,index=False)
