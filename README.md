@@ -42,13 +42,7 @@ $ python nested_tandem_TE_classification.py wdir strain TEAnnotation
 
 #### Run Minimap2 in splice-aware mode, and without it (Reference_genes.fasta and Reference_primary_cds.fasta: produced by cds_gene_fasta_preparation.py)
 
-- minimap2 -ax asm5 -t 8  -uf -C5 FastaPath Reference_genes.fasta > genes2strain 
-
-- minimap2 -ax splice -t 8 -uf -C5 FastaPath Reference_primary_cds.fasta > cds2strain
-
-
-
-$ python gene_transfer.py strain FastaPath
+$ python gene_transfer.py wdir strain FastaPath
 
 ### TE transfer 
 
