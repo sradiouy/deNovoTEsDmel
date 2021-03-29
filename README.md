@@ -6,11 +6,15 @@ load the folowwing modules:
 -  minimap2/2.11-foss-2016b
 -  Python/3.7.2-GCCcore-8.2.0
 
+
+
+# Step to follow to transfer TEs and genes:
+
 # Prepare CDS and genes reference fasta
 
 python cds_gene_fasta_preparation.py
 
-## Step to follow to transfer TEs and genes:
+#### Set varaible names
 
 strain = base name of a strain (i.e., STO-022)
 FastaPath = path to fasta file of genome assemble
