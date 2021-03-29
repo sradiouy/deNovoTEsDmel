@@ -378,7 +378,7 @@ df_to_define_type_of_mapping = pd.DataFrame(list_te,columns=["teid","start","end
 
 ## Cargo la informacion de los TE (como fue su transferencia)
 
-df_te_info = pd.read_table("/homes/users/sradio/scratch/eQTL_Dros/TEs_genomes_annotation/minimap2/Results/"+ sys.argv[1] + "/" + sys.argv[1] + "_TE_info.tsv",sep="\t",header=0)
+df_te_info = pd.read_table(sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_TE_info.tsv",sep="\t",header=0)
 
 df_te_info["te_number"] = df_te_info["teid"].str.split("_").str[1:2].str[0] # dicatamino numero de te
 df_te_info["te_family"] = ["_".join(ID.split("_")[2:]) for ID in df_te_info.teid.tolist()]
@@ -1243,9 +1243,9 @@ fo.write(log_line)
 fo.close()
 
 
-reference_te_bed = sys.argv[4] + "/ISO1_TE_FlyBase_Repet.bed"
+reference_te_bed = sys.argv[5] + "/ISO1_TE_FlyBase_Repet.bed"
 
-reference_te_bed_info = sys.argv[4] + "/ISO1_TE_FlyBase_Repet_info.tsv"
+reference_te_bed_info = sys.argv[5] + "/ISO1_TE_FlyBase_Repet_info.tsv"
 
 df_ref_te_info = pd.read_table(reference_te_bed_info,sep="\t",header=0)
 
@@ -1371,7 +1371,7 @@ df_te = df_te.merge(df_nested_tandem,left_on="id",right_on="ID")
 
 te_strain_transferred_to_ref =sys.argv[1] + "/" + sys.argv[2] + "/" + sys.argv[2] + "_TE_transfer.bed"
 
-euchromatin_bed = sys.argv[4] + "/dmel-all-euchromatin-region.bed"
+euchromatin_bed = sys.argv[5] + "/dmel-all-euchromatin-region.bed"
 
 
 euchromatin_intersect = intersect_euchromatin(te_strain_transferred_to_ref,euchromatin_bed,"euchromatin_intersect.txt")
