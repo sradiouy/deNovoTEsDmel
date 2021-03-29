@@ -33,7 +33,7 @@ $ python bedTE2Fasta.py wdir strain TEAnnotation FastaPath
 
 ### get information of nested and tandem TEs
 
-$ python nested_tandem_TE_classification.py strain
+$ python nested_tandem_TE_classification.py wdir strain TEAnnotation
 
 ### Gene Transfer 
 
