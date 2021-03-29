@@ -10,16 +10,23 @@ load the folowwing modules:
 
 # Step to follow to transfer TEs and genes:
 
-# Prepare CDS and genes reference fasta
-
-python cds_gene_fasta_preparation.py
-
 #### Set varaible names
 
 wdir = working directory
 strain = base name of a strain (i.e., STO-022)
 FastaPath = full path to fasta file of genome assemble
 TEAnnotation = full path to TE annotation file in bed format
+
+
+### Prepare CDS and genes reference fasta
+
+#### Download the following files from flyBase and change accordingly in the following script:
+
+- dmel-all-r(VERSION).gtf'
+- dmel-all-gene-r(VERSION).fasta
+- dmel-all-CDS-r(VERSION).fasta
+
+python cds_gene_fasta_preparation.py wdir
 
 ### Obtain fasta sequence of TEs from bed file
 
