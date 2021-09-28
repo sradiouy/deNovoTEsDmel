@@ -187,7 +187,7 @@ def runminimap2(strain_TE_file,reference_genome_file,outfile,mode):
     mode: complete o flanking (archivo fasta de regiones flanqueantes a TE o de los propios TEs)
     """
     if mode == "complete":
-        commandLine = "minimap2 -ax asm5 -t 8  -uf -C5 " + reference_genome_file + " " + strain_TE_file
+        commandLine = "minimap2 -ax asm5 -t 8  -C5 " + reference_genome_file + " " + strain_TE_file
     elif mode == "flanking": 
         commandLine = "minimap2 -ax splice -G100k -B2 -t 8 -uf -C5  " + reference_genome_file + " " + strain_TE_file
     stdout = runcml(commandLine)
